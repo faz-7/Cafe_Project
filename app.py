@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 # from models.user import User
 from Cafe_Project.user.utils import check_login, add_user, check_username
-from menu_items.utils import get_menuitems
+from menu_items.utils import get_menuitems, get_item
 
 app = Flask(__name__)
 
@@ -60,6 +60,12 @@ def login():
             error = 'Invalid Credentials. Please try again.'
 
     return render_template('login.html', error=error)
+
+
+@app.route('/menu_item')
+def menu_item():
+    items = list(get_item())
+    return render_template('menu_item.html', items=items)
 
 
 if __name__ == '__main__':
