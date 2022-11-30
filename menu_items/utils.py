@@ -11,6 +11,6 @@ def get_menuitems(cat):
                 'price':q.price,
                 'imgpath':q.imgpath
             }
-
-
-
+            
+def get_item():
+    return session.query(MenuItems).all()
