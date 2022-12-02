@@ -20,7 +20,7 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Employee<b>Details</b></h2></div>
+                    <div class="col-sm-8"><h2>Menu<b>Item</b></h2></div>
                     <div class="col-sm-4">
                         <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
@@ -30,15 +30,14 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Department</th>
-                        <th>Phone</th>
+                        <th>Price</th>
+                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in items %}
                         <tr>
-                            <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.price }}</td>
                             <td>{{ item.category }}</td>
