@@ -1,3 +1,3 @@
-# Cafe_Project
-online website to reserve coffe
+# Coffee_Project
+online website to reserve coffee
 using flask :)
