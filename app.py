@@ -1,3 +1,10 @@
+
+from flask import Flask, render_template, url_for, request, redirect
+from Cafe_Project.menu_items.utils import MenuItems, get_item
+from Cafe_Project.user.utils import create_receipt, check_login, add_user
+from Cafe_Project.table.utils import assign_table
+from Cafe_Project.receipt.utils import get_id, get_receipt, total_amount, add
+
 from flask import Flask, render_template, url_for, request, redirect, abort
 from core.db_manager import session
 from receipt.utils import add_receipt, get_receipt, total_amount, check_user_receipt, update_total_amount, \
@@ -6,6 +13,7 @@ from tables.utils import check_table, reserve, get_filter_table
 from user.utils import check_login, add_user, check_username, get_id
 from menu_items.utils import get_menuitems, get_item, add_item
 from order.utils import get_order_list, change_status, add_order, order_info
+
 
 app = Flask(__name__)
 global user_id, receipt_id
@@ -29,12 +37,15 @@ def signup_page():
 
 @app.route('/sign_up', methods=['POST'])
 def sign_up():
-    username = request.form['user_name']
     first_name = request.form['first_name']
     last_name = request.form['last_name']
     email = request.form['email']
     phone = request.form['phone']
     password = request.form['password']
+
+    add_user(4, first_name, last_name, phone, email, password)
+    return render_template('index.html')
+
     if check_username(username):
         add_user(username=username, fname=first_name, lname=last_name, phone=phone, email=email, password=password)
         global user_id
@@ -46,9 +57,19 @@ def sign_up():
         return render_template('signup.html', error=True)
 
 
+
 @app.route('/login')
 def login_page():
+    # return render_template('receipt.html')
     return render_template('login.html')
+    # items = list(get_item())
+    # return render_template('menu_item.html', items=items)
+
+
+@app.route('/menu_item')
+def menu_item():
+    items = list(get_item())
+    return render_template('menu_item.html', items=items)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -57,6 +78,15 @@ def login():
     if request.method == 'POST':
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             if check_login(request.form['username'], request.form['password']):
+
+                create_receipt(request.form['password'])
+                return redirect(url_for('home'))
+            else:
+                error = "<h1> invalid user pass </h1>"
+                return render_template('login.html', error=error)
+                # todo: error
+
+
                 global user_id
                 user_id = get_id(request.form['username'])
                 foods = list(get_menuitems('food'))
@@ -64,6 +94,7 @@ def login():
                 return render_template('index.html', autorize=True, foods=foods, drinks=drinks)
             else:
                 return render_template('login.html', error=True)
+
         else:
             foods = list(get_menuitems('food'))
             drinks = list(get_menuitems('drink'))
@@ -72,6 +103,21 @@ def login():
     return render_template('login.html', error=error)
 
 
+
+@app.route('/create_receipt/<string:id>', methods=['GET', 'POST'])
+def create_receipt(id):
+    if assign_table():
+        add(id=id, user_id=id, table_id=assign_table(), total_price=0, pay=False)
+    else:
+        pass
+
+
+@app.route('/show_receipt/<string:id>', methods=['GET', 'POST'])
+def show_receipt(id):
+    receipts = get_receipt(id)
+    total = total_amount(id)
+    return render_template('receipt.html', receipts=receipts, total=total)
+=======
 @app.route('/orders')
 def orders():
     orders_list = get_order_list()
@@ -152,6 +198,7 @@ def pay_receipt():
     table.available = True
     session.commit()
     return redirect(url_for('display_receipt'))
+
 
 
 @app.route('/receipt_list', methods=['GET', 'POST'])

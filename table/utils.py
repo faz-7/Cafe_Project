@@ -1,3 +1,6 @@
+
+from Cafe_Project.core.db_manager import session
+from Cafe_Project.models.table import Table
 from core.db_manager import session
 from models.table import Table
 
@@ -17,3 +20,9 @@ def reserve(table_id):
     table = session.query(Table).filter_by(id=table_id).first()
     table.available = False
     session.commit()
+    
+def assign_table():
+    table = session.query(Table).filter_by(available=True).first()
+    if table:
+        return table.id
+

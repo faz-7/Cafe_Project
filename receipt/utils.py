@@ -1,3 +1,9 @@
+
+import sqlalchemy
+
+from Cafe_Project.core.db_manager import session
+from Cafe_Project.models.receipts import Receipt
+
 import sqlalchemy
 from core.db_manager import session
 from models.receipts import Receipt
@@ -28,3 +34,8 @@ def add_receipt(table_id, user_id, total_price, pay):
     receipt = Receipt(table_id=table_id, user_id=user_id, total_price=total_price, pay=pay)
     session.add(receipt)
     session.commit()
+    
+def get_id():
+    id = session.query(Receipt).order_by(sqlalchemy.desc(Receipt.id)).first()
+    return id + 1
+

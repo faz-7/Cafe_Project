@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	var actions = $("table td:last-child").html();
@@ -7,8 +8,8 @@ $(document).ready(function(){
 		var index = $("table tbody tr:last-child").index();
         var row = '<tr>' +
             '<td><input type="text" class="form-control" name="name" id="name"></td>' +
-            '<td><input type="text" class="form-control" name="price" id="price"></td>' +
-            '<td><input type="text" class="form-control" name="category" id="category"></td>' +
+            '<td><input type="text" class="form-control" name="department" id="department"></td>' +
+            '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
 			'<td>' + actions + '</td>' +
         '</tr>';
     	$("table").append(row);
